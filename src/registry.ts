@@ -20,6 +20,7 @@ export interface Arg {
   positional?: boolean;
   help?: string;
   choices?: string[];
+  hidden?: boolean;
 }
 
 export interface RequiredEnv {

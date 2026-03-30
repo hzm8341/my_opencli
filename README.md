@@ -249,6 +249,63 @@ opencli generate https://example.com --goal "hot"   # One-shot: explore → synt
 opencli cascade https://api.example.com/data         # Auto-probe: PUBLIC → COOKIE → HEADER
 ```
 
+## MCP Server
+
+OpenCLI includes a built-in MCP (Model Context Protocol) server that exposes all 430+ commands as native tools for AI agents like Claude Code.
+
+### Configuration
+
+Create a `.mcp.json` file in your project or home directory:
+
+```json
+{
+  "mcpServers": {
+    "opencli": {
+      "command": "opencli",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+For Claude Code specifically, place the `.mcp.json` in:
+- **Project-level**: `./.mcp.json` (in your project directory)
+- **Global**: `~/.claude/.mcp.json`
+
+### Available Tools
+
+Once configured, AI agents can discover and use all opencli commands as tools, including:
+
+| Category | Examples |
+|----------|----------|
+| **Social Media** | `xiaohongshu/search`, `twitter/search`, `reddit/hot` |
+| **Video Platforms** | `bilibili/hot`, `youtube/trending` |
+| **Developer Tools** | `gh/pr-list`, `docker/ps`, `gh/issue-list` |
+| **Content Download** | `zhihu/download`, `xiaohongshu/download`, `bilibili/download` |
+| **Desktop Apps** | `cursor/chat`, `antigravity/read`, `chatgpt/send` |
+
+### Usage Example
+
+After configuring MCP, you can interact with opencli naturally:
+
+```
+You: "Search Xiaohongshu for the most popular posts about AI"
+Claude: [uses xiaohongshu/search tool]
+
+You: "Download the top 5 Hacker News articles to my desktop"
+Claude: [uses hackernews/top tool + zhihu/download tool]
+```
+
+### Testing the MCP Server
+
+```bash
+# List all available tools
+echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | opencli mcp
+
+# Call a specific tool
+echo '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"hackernews/best","arguments":{"limit":5}}}' | opencli mcp
+```
+
 ## Testing
 
 See **[TESTING.md](./TESTING.md)** for how to run and write tests.

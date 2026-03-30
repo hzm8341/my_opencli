@@ -373,6 +373,63 @@ opencli cascade https://api.example.com/data
 
 探索结果输出到 `.opencli/explore/<site>/`。
 
+## MCP Server
+
+OpenCLI 内置了 MCP（Model Context Protocol）服务器，将全部 430+ 命令以原生工具的方式暴露给 Claude Code 等 AI Agent。
+
+### 配置方法
+
+在项目目录或用户主目录创建 `.mcp.json` 文件：
+
+```json
+{
+  "mcpServers": {
+    "opencli": {
+      "command": "opencli",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+对于 Claude Code，请将 `.mcp.json` 放置到：
+- **项目级**：`./.mcp.json`（项目目录内）
+- **全局**：`~/.claude/.mcp.json`
+
+### 可用工具
+
+配置完成后，AI Agent 可发现并使用所有 opencli 命令作为工具，包括：
+
+| 类别 | 示例 |
+|------|------|
+| **社交媒体** | `xiaohongshu/search`、`twitter/search`、`reddit/hot` |
+| **视频平台** | `bilibili/hot`、`youtube/trending` |
+| **开发者工具** | `gh/pr-list`、`docker/ps`、`gh/issue-list` |
+| **内容下载** | `zhihu/download`、`xiaohongshu/download`、`bilibili/download` |
+| **桌面应用** | `cursor/chat`、`antigravity/read`、`chatgpt/send` |
+
+### 使用示例
+
+配置好 MCP 后，你可以自然地与 opencli 交互：
+
+```
+你："搜索小红书上关于 AI 的热门帖子"
+Claude：[调用 xiaohongshu/search 工具]
+
+你："下载知乎上前 5 篇 VLA 相关文章到桌面"
+Claude：[调用 zhihu/search + zhihu/download 工具]
+```
+
+### MCP Server 测试
+
+```bash
+# 列出所有可用工具
+echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | opencli mcp
+
+# 调用特定工具
+echo '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"hackernews/best","arguments":{"limit":5}}}' | opencli mcp
+```
+
 ## 常见问题排查
 
 - **"Extension not connected" 报错**

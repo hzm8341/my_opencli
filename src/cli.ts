@@ -508,6 +508,16 @@ export function runCli(BUILTIN_CLIS: string, USER_CLIS: string): void {
       await startServe({ port: parseInt(opts.port) });
     });
 
+  // ── MCP Server ─────────────────────────────────────────────────────────────
+
+  program
+    .command('mcp')
+    .description('Start opencli MCP Server for Model Context Protocol')
+    .action(async () => {
+      const { startMcpServer } = await import('./mcp-server.js');
+      await startMcpServer();
+    });
+
   // ── Dynamic adapter commands ──────────────────────────────────────────────
 
   const siteGroups = new Map<string, Command>();
