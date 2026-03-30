@@ -420,6 +420,49 @@ Claude：[调用 xiaohongshu/search 工具]
 Claude：[调用 zhihu/search + zhihu/download 工具]
 ```
 
+### 完整使用实例（以知乎文章下载为例）
+
+以下实例演示如何通过 opencli 搜索并下载知乎上的 VLA 相关文章：
+
+**前置条件**：
+1. Chrome 已安装 opencli Browser Bridge 扩展（见上方扩展配置）
+2. Chrome 已登录知乎网站（zhihu.com）
+3. Node.js >= 20
+
+**步骤一：安装 opencli（如果尚未安装）**
+```bash
+npm install -g @jackwener/opencli
+```
+
+**步骤二：验证扩展连接状态**
+```bash
+opencli doctor
+# 确保输出显示 "Browser Bridge: connected"
+```
+
+**步骤三：搜索知乎上的 VLA 文章**
+```bash
+opencli zhihu search "VLA" --limit 10
+```
+
+**步骤四：下载文章到本地**
+```bash
+# 下载单篇文章为 Markdown
+opencli zhihu download "https://zhuanlan.zhihu.com/p/1914410510843090798" --output ./zhihu-articles
+
+# 批量下载多篇文章
+opencli zhihu download --url "https://zhuanlan.zhihu.com/p/xxx" --output ./zhihu-articles
+```
+
+**步骤五：通过 MCP Server 使用（Claude Code 等 AI 工具）**
+```bash
+# 启动 MCP Server
+opencli mcp
+
+# 在 Claude Code 中配置 .mcp.json 后，可直接对话：
+# "帮我搜索知乎上关于 VLA 的最新文章，并下载前 5 篇"
+```
+
 ### MCP Server 测试
 
 ```bash

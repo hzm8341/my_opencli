@@ -296,6 +296,49 @@ You: "Download the top 5 Hacker News articles to my desktop"
 Claude: [uses hackernews/top tool + zhihu/download tool]
 ```
 
+### Complete Usage Example (Zhihu Article Download)
+
+This example demonstrates how to search and download VLA articles from Zhihu:
+
+**Prerequisites**:
+1. Chrome browser with opencli Browser Bridge extension installed (see [Browser Bridge Setup](#browser-bridge-extension))
+2. Chrome logged into zhihu.com
+3. Node.js >= 20
+
+**Step 1: Install opencli (if not already installed)**
+```bash
+npm install -g @jackwener/opencli
+```
+
+**Step 2: Verify extension connection**
+```bash
+opencli doctor
+# Ensure output shows "Browser Bridge: connected"
+```
+
+**Step 3: Search Zhihu for VLA articles**
+```bash
+opencli zhihu search "VLA" --limit 10
+```
+
+**Step 4: Download articles to local**
+```bash
+# Download single article as Markdown
+opencli zhihu download "https://zhuanlan.zhihu.com/p/1914410510843090798" --output ./zhihu-articles
+
+# Batch download multiple articles
+opencli zhihu download --url "https://zhuanlan.zhihu.com/p/xxx" --output ./zhihu-articles
+```
+
+**Step 5: Use via MCP Server (Claude Code and other AI tools)**
+```bash
+# Start MCP Server
+opencli mcp
+
+# In Claude Code, after configuring .mcp.json, simply ask:
+# "Search Zhihu for the latest VLA articles and download the top 5"
+```
+
 ### Testing the MCP Server
 
 ```bash
