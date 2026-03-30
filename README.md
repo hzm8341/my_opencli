@@ -272,6 +272,75 @@ For Claude Code specifically, place the `.mcp.json` in:
 - **Project-level**: `./.mcp.json` (in your project directory)
 - **Global**: `~/.claude/.mcp.json`
 
+### Claude Code Usage Example
+
+After configuring the MCP Server in Claude Code, you'll see all 430+ opencli tools automatically discovered:
+
+```
+🔧 Tools (430)
+├── 📱 xiaohongshu/search        — Search Xiaohongshu notes
+├── 📱 xiaohongshu/download      — Download Xiaohongshu images/videos
+├── 📱 xiaohongshu/feed         — Get Xiaohongshu feed
+├── 🎬 bilibili/hot              — Bilibili trending videos
+├── 🎬 bilibili/search           — Bilibili video search
+├── 📰 zhihu/search              — Search Zhihu articles
+├── 📰 zhihu/download            — Download Zhihu articles as Markdown
+├── 🐦 twitter/search            — Twitter search
+├── 📊 hackernews/best          — Hacker News best stories
+├── 💻 cursor/chat               — Cursor IDE chat
+└── ... (430 more tools)
+```
+
+**Actual Conversation Example**:
+
+```
+You: Search Xiaohongshu for the most popular posts about AI
+
+Claude:
+I'll use the xiaohongshu/search tool to search for you.
+
+[Tool: xiaohongshu/search]
+Arguments: {"query": "AI", "limit": 10}
+
+┌──────┬────────────────────────────────────┬───────────────────────┬───────┐
+│ Rank │ Title                              │ Author                │ Likes │
+├──────┼────────────────────────────────────┼───────────────────────┼───────┤
+│ 1    │ ChatGPT is really amazing...       │ TechFan               │ 9521  │
+│ 2    │ AI generated images are so real    │ DesignDaily           │ 7342  │
+│ 3    │ midjourney art sharing             │ AICreator             │ 6231  │
+└──────┴────────────────────────────────────┴───────────────────────┴───────┘
+```
+
+**Complete Workflow Example**:
+
+```bash
+# 1. Create .mcp.json in project directory
+echo '{"mcpServers":{"opencli":{"command":"opencli","args":["mcp"]}}}' > .mcp.json
+
+# 2. Restart Claude Code, verify tools are discovered
+# You'll see 430+ opencli tools in the Tools list
+
+# 3. Use naturally in conversation
+You: Download the top 5 VLA articles from Zhihu to /tmp/zhihu-vla
+
+Claude:
+I'll help you with that. First I'll search for VLA articles, then download the top 5.
+
+[Tool: zhihu/search]
+Arguments: {"query": "VLA", "limit": 5}
+
+Search results:
+1. VLA Cannot Generalize, But VLA Generalization is Possible (676 votes)
+2. Three Schools of Embodied Intelligence: RL, VLA, World Model (109 votes)
+3. VLA and World Models are Gradually Converging (71 votes)
+...
+
+[Tool: zhihu/download]
+Arguments: {"url": "https://zhuanlan.zhihu.com/p/1914410510843090798", "output": "/tmp/zhihu-vla"}
+
+Download complete! Articles saved to /tmp/zhihu-vla/
+```
+
 ### Available Tools
 
 Once configured, AI agents can discover and use all opencli commands as tools, including:

@@ -396,6 +396,75 @@ OpenCLI 内置了 MCP（Model Context Protocol）服务器，将全部 430+ 命�
 - **项目级**：`./.mcp.json`（项目目录内）
 - **全局**：`~/.claude/.mcp.json`
 
+### Claude Code 使用案例
+
+在 Claude Code 中配置好 MCP Server 后，你会看到 opencli 的 430+ 工具被自动发现：
+
+```
+🔧 Tools (430)
+├── 📱 xiaohongshu/search        — 搜索小红书笔记
+├── 📱 xiaohongshu/download      — 下载小红书图片/视频
+├── 📱 xiaohongshu/feed         — 获取小红书推荐内容
+├── 🎬 bilibili/hot              — B站热门视频
+├── 🎬 bilibili/search           — B站视频搜索
+├── 📰 zhihu/search              — 搜索知乎文章
+├── 📰 zhihu/download            — 下载知乎文章为 Markdown
+├── 🐦 twitter/search            — Twitter 搜索
+├── 📊 hackernews/best          — Hacker News 最佳故事
+├── 💻 cursor/chat               — Cursor IDE 对话
+└── ... (430 more tools)
+```
+
+**实际对话示例**：
+
+```
+你：帮我搜索小红书上关于 AI 的热门帖子
+
+Claude：
+我将使用 xiaohongshu/search 工具帮你搜索。
+
+[调用工具: xiaohongshu/search]
+参数: {"query": "AI", "limit": 10}
+
+┌──────┬────────────────────────────────────┬───────────────────────┬───────┐
+│ Rank │ Title                              │ Author                │ Likes │
+├──────┼────────────────────────────────────┼───────────────────────┼───────┤
+│ 1    │ ChatGPT 真的太强了...              │ 科技控                 │ 9521  │
+│ 2    │ AI 生成的图片也太真实了吧           │ 设计日常               │ 7342  │
+│ 3    │ midjourney 作画心得分享            │ AI创作者               │ 6231  │
+└──────┴────────────────────────────────────┴───────────────────────┴───────┘
+```
+
+**完整使用流程示例**：
+
+```bash
+# 1. 在项目目录创建 .mcp.json
+echo '{"mcpServers":{"opencli":{"command":"opencli","args":["mcp"]}}}' > .mcp.json
+
+# 2. 重启 Claude Code，验证工具已发现
+# 你会看到 Tools 列表中出现 430+ opencli 工具
+
+# 3. 直接对话使用
+你：下载知乎上前 5 篇 VLA 相关文章到 /tmp/zhihu-vla
+
+Claude：
+我将帮你完成这个任务。首先搜索 VLA 相关文章，然后下载前 5 篇。
+
+[调用工具: zhihu/search]
+参数: {"query": "VLA", "limit": 5}
+
+搜索结果：
+1. VLA不可能泛化，不过VLA泛化有点可能 (676 votes)
+2. 机器人具身智能三大流派 (109 votes)
+3. VLA和世界模型正在逐渐走向融合统一 (71 votes)
+...
+
+[调用工具: zhihu/download]
+参数: {"url": "https://zhuanlan.zhihu.com/p/1914410510843090798", "output": "/tmp/zhihu-vla"}
+
+下载完成！文章已保存到 /tmp/zhihu-vla/
+```
+
 ### 可用工具
 
 配置完成后，AI Agent 可发现并使用所有 opencli 命令作为工具，包括：
